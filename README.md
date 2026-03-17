@@ -29,10 +29,10 @@
 cd agentd
 
 # 使用默认在线设备启动 (将 192.168.x.x 替换为信令服务器的实际 IP)
-./run.sh -id my-device-01 -signaling ws://192.168.x.x:8443 -root
+./run.sh -id my-device-01 -signaling ws://192.168.x.x:8443
 
 # 如果有多个 adb 设备，可以指定 Serial Number
-./run.sh emulator-5554 -id my-device-01 -signaling ws://192.168.x.x:8443 -root
+./run.sh emulator-5554 -id my-device-01 -signaling ws://192.168.x.x:8443
 ```
 
 #### 方式二：Docker / Redroid 容器环境 (NAT 网络穿透)
