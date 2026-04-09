@@ -7,7 +7,8 @@
 
 - **极致流畅 (Phase 22)**: 引入硬件级时钟透传 (HW-PTS Passthrough)，WebRTC Jitter Buffer 接近 0ms，彻底消除画面抖动。
 - **性能卓越**: 采用零扫描流解析 (Zero-Search Parsing)，极大降低 Agent 端 CPU 占用。
-- **秒级直连**: 绕过中转服务器，实现浏览器与 Android 容器/物理机的 P2P 高速通信。
+- **秒级直连 (Phase 26)**: 集成 UPnP 与自动公网探测，实现浏览器与 Android 端无需配置路由器的 P2P 高速直连。
+- **公网增强**: 原生支持 IPv6 直连，彻底绕过运营商 CGNAT 封锁，显著提升移动网络下的打洞成功率。
 - **全能交互**: 支持触控、物理按键模拟、WebADB 终端、实时快照与仪表盘管理。
 - **一键部署**: 支持 WebUSB/WebADB 浏览器直连部署，无需本地安装 ADB 环境。
 
@@ -54,12 +55,12 @@ cd agentd
 ./run.sh -id phone-01 -signaling ws://192.168.x.x:8443
 ```
 
-#### 方式三：Docker / Redroid 容器 (支持 NAT 穿透)
-如果 Agent 运行在隔离容器内，需映射 UDP 端口（默认 50000）并指定外部 IP。
+#### 方式三：Docker / Redroid 容器 (支持自动公网穿透)
+Agent 运行在隔离容器内时，建议开启 UPnP 并映射端口。
 ```bash
 ./run.sh -id redroid-01 \
   -signaling ws://<服务器IP>:8443 \
-  -external-addr <宿主机公网/局域网IP> \
+  -upnp true \
   -webrtc-port 50000
 ```
 
@@ -67,12 +68,16 @@ cd agentd
 
 在启动 Agent 时，可以通过参数进一步优化体验：
 
+- `-ice-servers`: 自定义 STUN/TURN 服务器（逗号分隔）。支持 `turn:user:pass@host:port` 格式。
+- `-upnp`: 是否启用 UPnP 自动端口映射与公网 IP 探测（默认 true）。
+- `-external-addr`: 手动指定公网 IP（若 UPnP 失败可手动指定）。
 - `-bitrate`: 视频码率（默认 4000000 bps）。
 - `-max-fps`: 限制最高帧率（默认不限制，建议 60）。
+- `-max-size`: 限制视频最长边（默认不限制）。
 - `-video-codec-options`: 编码器底层调优。
   - *默认推荐*: `"intra-refresh-period=30,i-frame-interval=0"` (启用渐进式刷新，消除 UDP 丢包导致的卡顿)。
 - `-snapshot-interval`: 仪表盘快照更新频率（默认 10 秒）。
 - `-root`: 强制以 Root 权限启动服务（解决部分 ROM 权限限制）。
 
 ---
-*本项目持续迭代中
+*本项目持续迭代中，更多细节请参考 `docs/` 目录下的架构文档。*
