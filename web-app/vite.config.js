@@ -29,7 +29,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: '../assets',
+    outDir: '../assets/v1',
     emptyOutDir: false
   }
 })
